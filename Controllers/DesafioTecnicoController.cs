@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TesteTecnico.Business.Services;
 
 namespace TesteTecnico.Controllers
 {
@@ -6,12 +7,16 @@ namespace TesteTecnico.Controllers
     [Route("[controller]")]
     public class DesafioTecnicoController : ControllerBase
     {
-        public DesafioTecnicoController() { }
+        private readonly DesafioTecnicoServico _desafioTecnicoServico;
+        public DesafioTecnicoController() 
+        {;
+            _desafioTecnicoServico = new DesafioTecnicoServico();
+        }
 
         [HttpGet(Name = "NumeroPorExtenso/{numero}")]
-        public string GetNumeroPorExtenso(int numero)
+        public string GetNumeroPorExtenso(long numero)
         {
-            return null;
+            return _desafioTecnicoServico.GetNumeroPorExtenso(numero);
         }
     }
 }
