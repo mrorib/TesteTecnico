@@ -28,12 +28,12 @@
 
                     if(centenaTrilhao > 0)
                     {
-                        retorno = GetCentenaPorExtenso(centenaTrilhao);
+                        retorno += GetCentenaPorExtenso(centenaTrilhao);
 
                         if (Convert.ToInt32(numeroString.Substring(0, 3)) == 1)
-                            retorno += " trilhão" + ((Convert.ToInt16(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " trilhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                         else if (Convert.ToInt32(numeroString.Substring(0, 3)) > 1)
-                            retorno += " trilhões" + ((Convert.ToInt16(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " trilhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                     }
                     numeroString = numeroString.Remove(0, 3);
                 }
@@ -43,12 +43,12 @@
 
                     if (centenaBilhao > 0)
                     {
-                        retorno = GetCentenaPorExtenso(centenaBilhao);
+                        retorno += GetCentenaPorExtenso(centenaBilhao);
 
                         if (Convert.ToInt32(numeroString.Substring(0, 3)) == 1)
-                            retorno += " bilhão" + ((Convert.ToInt16(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " bilhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                         else if (Convert.ToInt32(numeroString.Substring(0, 3)) > 1)
-                            retorno += " bilhões" + ((Convert.ToInt16(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " bilhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                     }
                     numeroString = numeroString.Remove(0, 3);
                 }
@@ -58,12 +58,12 @@
 
                     if (centenaMilhao > 0)
                     {
-                        retorno = GetCentenaPorExtenso(centenaMilhao);
+                        retorno += GetCentenaPorExtenso(centenaMilhao);
 
                         if (Convert.ToInt32(numeroString.Substring(0, 3)) == 1)
-                            retorno += " milhão" + ((Convert.ToInt16(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " milhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                         else if (Convert.ToInt32(numeroString.Substring(0, 3)) > 1)
-                            retorno += " milhões" + ((Convert.ToInt16(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " milhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                     }
                     numeroString = numeroString.Remove(0, 3);
                 }
@@ -73,8 +73,8 @@
 
                     if (centenaMilhar > 0)
                     {
-                        retorno = GetCentenaPorExtenso(centenaMilhar);
-                        retorno += " mil" + ((Convert.ToInt16(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                        retorno += GetCentenaPorExtenso(centenaMilhar);
+                        retorno += " mil" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                     }
                     numeroString = numeroString.Remove(0, 3);
                 }
@@ -102,7 +102,7 @@
 
             if (numeroString.Length == 3)
             {
-                retorno = arrayCentena[Convert.ToInt16(numeroString.Substring(0, 1))];
+                retorno += arrayCentena[Convert.ToInt32(numeroString.Substring(0, 1))];
                 numeroString = numeroString.Remove(0, 1);
             }
 
@@ -113,12 +113,12 @@
 
                 if(numeroString.Substring(0, 1) == "1")
                 {
-                    retorno += arrayDezenaDez[Convert.ToInt16(numeroString.Substring(1, 1))];
+                    retorno += arrayDezenaDez[Convert.ToInt32(numeroString.Substring(1, 1))];
                     numeroString = string.Empty;
                 }
                 else
                 {
-                    retorno += arrayDezena[Convert.ToInt16(numeroString.Substring(0, 1))];
+                    retorno += arrayDezena[Convert.ToInt32(numeroString.Substring(0, 1))];
                     numeroString = numeroString.Remove(0, 1);
                 }
             }
@@ -128,7 +128,7 @@
                 if (!string.IsNullOrWhiteSpace(retorno) && numeroString.Substring(0, 1) != "0")
                     retorno += " e ";
 
-                retorno += arrayUnidade[Convert.ToInt16(numeroString.Substring(0, 1))];
+                retorno += arrayUnidade[Convert.ToInt32(numeroString.Substring(0, 1))];
                 numeroString = string.Empty;
             }
 
