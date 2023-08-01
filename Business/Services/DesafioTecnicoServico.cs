@@ -6,10 +6,11 @@ namespace TesteTecnico.Business.Services
 {
     public class DesafioTecnicoServico
     {
-        private static string[] arrayUnidade = new string[] { "", "Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove" };
-        private static string[] arrayDezenaDez = new string[] { "Dez", "Onze", "Doze", "Treze", "Quatorze", "Quinze", "Dezesseis", "Dezessete", "Dezoito", "Dezenove" };
-        private static string[] arrayDezena = new string[] { "", "", "Vinte", "Trinta", "Quarenta", "Cinquenta", "Sessenta", "Setenta", "Oitenta", "Noventa" };
-        private static string[] arrayCentena = new string[] { "", "Cem", "Duzentos", "Trezentos", "Quatrocentos", "Quinhentos", "Seiscentos", "Setecentos", "Oitocentos", "Novecentos" };
+        private static string[] _arrayUnidade = new string[] { "", "Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove" };
+        private static string[] _arrayDezenaDez = new string[] { "Dez", "Onze", "Doze", "Treze", "Quatorze", "Quinze", "Dezesseis", "Dezessete", "Dezoito", "Dezenove" };
+        private static string[] _arrayDezena = new string[] { "", "", "Vinte", "Trinta", "Quarenta", "Cinquenta", "Sessenta", "Setenta", "Oitenta", "Noventa" };
+        private static string[] _arrayCentena = new string[] { "", "Cem", "Duzentos", "Trezentos", "Quatrocentos", "Quinhentos", "Seiscentos", "Setecentos", "Oitocentos", "Novecentos" };
+        private static List<string> _listaOperadores = new List<string> { "%2F", "*", "-", "+" };
 
         public string GetNumeroPorExtenso(long numero)
         {
@@ -130,6 +131,84 @@ namespace TesteTecnico.Business.Services
             return retorno;
         }
 
+        public double GetResultadoExpressao(string expressao)
+        {
+            var arrayImputs = expressao.Split(' ').Select(x => x.Trim()).ToArray();
+            var listaImputsOrdenados = new List<string>();
+            var listaNumeros = new List<double>();
+            var listaOperadores = new List<string>();
+
+            //Cria Notação polonesa inversa
+            for (int i = 0; i < arrayImputs.Length; i++)
+            {
+                if (int.TryParse(arrayImputs[i], out int o))
+                {
+                    listaImputsOrdenados.Add(arrayImputs[i]);
+                }
+                else if (_listaOperadores.Contains(arrayImputs[i]))
+                {
+                    if(listaOperadores.Count == 0)
+                    {
+                        listaOperadores.Add(arrayImputs[i]);
+                    }
+                    else
+                    {
+                        if(_listaOperadores.IndexOf(arrayImputs[i]) > _listaOperadores.IndexOf(listaOperadores.Last()))
+                        {
+                            listaImputsOrdenados.Add(listaOperadores.Last());
+                            listaOperadores.RemoveAt(listaOperadores.Count - 1);
+                        }
+
+                        listaOperadores.Add(arrayImputs[i]);
+                    }
+                }
+                else
+                    throw new Exception("Expressão inválida, utilize números e os operadores(\"/\", \"*\", \"-\", \"+\") separados por espaço");
+            }
+
+            //Adiciona os Operadores faltantes
+            while(listaOperadores.Count > 0)
+            {
+                listaImputsOrdenados.Add(listaOperadores.Last());
+                listaOperadores.RemoveAt(listaOperadores.Count - 1);
+            }
+
+            //Executa a Notação polonesa inversa
+            foreach (var item in listaImputsOrdenados)
+            {
+                if (int.TryParse(item, out int i))
+                {
+                    listaNumeros.Add(i);
+                }
+                else
+                {
+                    double valor2 = listaNumeros.LastOrDefault();
+                    listaNumeros.RemoveAt(listaNumeros.Count - 1);
+
+                    double valor1 = listaNumeros.LastOrDefault();
+                    listaNumeros.RemoveAt(listaNumeros.Count - 1);
+
+                    switch (item) 
+                    {
+                        case "+":
+                            listaNumeros.Add(valor1 + valor2);
+                            break;
+                        case "-":
+                            listaNumeros.Add(valor1 - valor2);
+                            break;
+                        case "*":
+                            listaNumeros.Add(valor1 * valor2);
+                            break;
+                        case "%2F":
+                            listaNumeros.Add(valor1 / valor2);
+                            break;
+                    }
+                }
+            }
+
+            return listaNumeros.LastOrDefault();
+        }
+
         private string GetCentenaPorExtenso(int numero)
         {
             if (numero <= 0)
@@ -141,7 +220,7 @@ namespace TesteTecnico.Business.Services
 
             if (numeroString.Length == 3)
             {
-                retorno += arrayCentena[Convert.ToInt32(numeroString.Substring(0, 1))];
+                retorno += _arrayCentena[Convert.ToInt32(numeroString.Substring(0, 1))];
                 numeroString = numeroString.Remove(0, 1);
             }
 
@@ -152,12 +231,12 @@ namespace TesteTecnico.Business.Services
 
                 if(numeroString.Substring(0, 1) == "1")
                 {
-                    retorno += arrayDezenaDez[Convert.ToInt32(numeroString.Substring(1, 1))];
+                    retorno += _arrayDezenaDez[Convert.ToInt32(numeroString.Substring(1, 1))];
                     numeroString = string.Empty;
                 }
                 else
                 {
-                    retorno += arrayDezena[Convert.ToInt32(numeroString.Substring(0, 1))];
+                    retorno += _arrayDezena[Convert.ToInt32(numeroString.Substring(0, 1))];
                     numeroString = numeroString.Remove(0, 1);
                 }
             }
@@ -167,7 +246,7 @@ namespace TesteTecnico.Business.Services
                 if (!string.IsNullOrWhiteSpace(retorno) && numeroString.Substring(0, 1) != "0")
                     retorno += " e ";
 
-                retorno += arrayUnidade[Convert.ToInt32(numeroString.Substring(0, 1))];
+                retorno += _arrayUnidade[Convert.ToInt32(numeroString.Substring(0, 1))];
                 numeroString = string.Empty;
             }
 
