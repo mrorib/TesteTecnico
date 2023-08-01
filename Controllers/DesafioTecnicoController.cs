@@ -18,5 +18,11 @@ namespace TesteTecnico.Controllers
         {
             return _desafioTecnicoServico.GetNumeroPorExtenso(numero);
         }
+
+        [HttpPost(Name = "Soma")]
+        public long GetNumeroPorExtenso(int[] arrayInteiros)
+        {
+            return _desafioTecnicoServico.GetSomaArrayInteiros(arrayInteiros);
+        }
     }
 }
