@@ -99,30 +99,33 @@ namespace TesteTecnico.Business.Services
         {
             long retorno = 0;
 
-            Console.WriteLine("Tamanho array: "+ arrayInteiros.Length.ToString("0"));
-
-            var listaInteiros = new List<int>(arrayInteiros);
-
-            Stopwatch watch = Stopwatch.StartNew();
-
-            foreach (int i in listaInteiros)
+            if(arrayInteiros.Length > 1000000) 
             {
-                retorno += i;
+                throw new BadHttpRequestException("Array maior do que um milhão");
             }
 
-            watch.Stop();
-            Console.WriteLine("List/foreach: {0}ms ({1})", watch.ElapsedMilliseconds, retorno);
+            //var listaInteiros = new List<int>(arrayInteiros);
 
-            retorno = 0;
-            watch = Stopwatch.StartNew();
+            //Stopwatch watch = Stopwatch.StartNew();
+
+            //foreach (int i in listaInteiros)
+            //{
+            //    retorno += i;
+            //}
+
+            //watch.Stop();
+            //Console.WriteLine("List/foreach: {0}ms ({1})", watch.ElapsedMilliseconds, retorno);
+
+            //retorno = 0;
+            //watch = Stopwatch.StartNew();
 
             foreach (int i in arrayInteiros)
             {
                 retorno += i;
             }
 
-            watch.Stop();
-            Console.WriteLine("Array/foreach: {0}ms ({1})", watch.ElapsedMilliseconds, retorno);
+            //watch.Stop();
+            //Console.WriteLine("Array/foreach: {0}ms ({1})", watch.ElapsedMilliseconds, retorno);
 
             return retorno;
         }
