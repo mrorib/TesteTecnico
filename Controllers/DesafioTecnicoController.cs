@@ -13,16 +13,23 @@ namespace TesteTecnico.Controllers
             _desafioTecnicoServico = new DesafioTecnicoServico();
         }
 
-        [HttpGet(Name = "NumeroPorExtenso/{numero}")]
+
+        [HttpGet("~/NumeroPorExtenso/{numero}")]
         public string GetNumeroPorExtenso(long numero)
         {
             return _desafioTecnicoServico.GetNumeroPorExtenso(numero);
         }
 
-        [HttpPost(Name = "Soma")]
+        [HttpPost("~/Soma")]
         public long GetNumeroPorExtenso(int[] arrayInteiros)
         {
             return _desafioTecnicoServico.GetSomaArrayInteiros(arrayInteiros);
+        }
+
+        [HttpGet("~/ResultadoExpressao/{expressao}")]
+        public double GetResultadoExpressao(string expressao)
+        {
+            return _desafioTecnicoServico.GetResultadoExpressao(expressao);
         }
     }
 }
