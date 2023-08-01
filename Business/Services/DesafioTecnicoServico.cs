@@ -1,4 +1,8 @@
-﻿namespace TesteTecnico.Business.Services
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Numerics;
+
+namespace TesteTecnico.Business.Services
 {
     public class DesafioTecnicoServico
     {
@@ -87,6 +91,41 @@
                 }
                 numeroString = string.Empty;
             }
+
+            return retorno;
+        }
+
+        public long GetSomaArrayInteiros(int[] arrayInteiros)
+        {
+            long retorno = 0;
+
+            if(arrayInteiros.Length > 1000000) 
+            {
+                throw new BadHttpRequestException("Array maior do que um milhão");
+            }
+
+            //var listaInteiros = new List<int>(arrayInteiros);
+
+            //Stopwatch watch = Stopwatch.StartNew();
+
+            //foreach (int i in listaInteiros)
+            //{
+            //    retorno += i;
+            //}
+
+            //watch.Stop();
+            //Console.WriteLine("List/foreach: {0}ms ({1})", watch.ElapsedMilliseconds, retorno);
+
+            //retorno = 0;
+            //watch = Stopwatch.StartNew();
+
+            foreach (int i in arrayInteiros)
+            {
+                retorno += i;
+            }
+
+            //watch.Stop();
+            //Console.WriteLine("Array/foreach: {0}ms ({1})", watch.ElapsedMilliseconds, retorno);
 
             return retorno;
         }
