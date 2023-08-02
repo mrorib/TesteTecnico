@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
+using System.Text.Json;
 
 namespace TesteTecnico.Business.Services
 {
@@ -207,6 +208,11 @@ namespace TesteTecnico.Business.Services
             }
 
             return listaNumeros.LastOrDefault();
+        }
+
+        public List<JsonElement> GetObjetosUnicos(List<JsonElement> listaObjetos)
+        {
+            return listaObjetos.DistinctBy(x => Convert.ToString(x) + x.ValueKind).ToList();
         }
 
         private string GetCentenaPorExtenso(int numero)
