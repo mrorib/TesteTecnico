@@ -22,7 +22,7 @@ namespace TesteTecnico.Controllers
         }
 
         [HttpPost("~/Soma")]
-        public long GetNumeroPorExtenso(int[] arrayInteiros)
+        public long GetSomaArrayInteiros(int[] arrayInteiros)
         {
             return _desafioTecnicoServico.GetSomaArrayInteiros(arrayInteiros);
         }
@@ -34,7 +34,7 @@ namespace TesteTecnico.Controllers
         }
 
         [HttpPost("~/ObjetosUnicos")]
-        public List<JsonElement> GetNumeroPorExtenso(List<JsonElement> listaObjetos)
+        public List<JsonElement> GetObjetosDistintos(List<JsonElement> listaObjetos)
         {
             return _desafioTecnicoServico.GetObjetosUnicos(listaObjetos);
         }

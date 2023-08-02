@@ -10,8 +10,8 @@ namespace TesteTecnico.Business.Services
         private static string[] _arrayUnidade = new string[] { "", "Um", "Dois", "Três", "Quatro", "Cinco", "Seis", "Sete", "Oito", "Nove" };
         private static string[] _arrayDezenaDez = new string[] { "Dez", "Onze", "Doze", "Treze", "Quatorze", "Quinze", "Dezesseis", "Dezessete", "Dezoito", "Dezenove" };
         private static string[] _arrayDezena = new string[] { "", "", "Vinte", "Trinta", "Quarenta", "Cinquenta", "Sessenta", "Setenta", "Oitenta", "Noventa" };
-        private static string[] _arrayCentena = new string[] { "", "Cem", "Duzentos", "Trezentos", "Quatrocentos", "Quinhentos", "Seiscentos", "Setecentos", "Oitocentos", "Novecentos" };
-        private static List<string> _listaOperadores = new List<string> { "%2F", "*", "-", "+" };
+        private static string[] _arrayCentena = new string[] { "", "Cento", "Duzentos", "Trezentos", "Quatrocentos", "Quinhentos", "Seiscentos", "Setecentos", "Oitocentos", "Novecentos" };
+        private static List<string> _listaOperadores = new List<string> { "/", "*", "-", "+" };
 
         public string GetNumeroPorExtenso(long numero)
         {
@@ -20,7 +20,7 @@ namespace TesteTecnico.Business.Services
             else if (numero > 999999999999999)
                 throw new BadHttpRequestException("Número Maior do que o suportado, ultrapassou a cada de trilhão. Max: 999.999.999.999.999");
             else if (numero == 0)
-                return "zero";
+                return "Zero";
 
             string retorno = string.Empty;
 
@@ -37,9 +37,9 @@ namespace TesteTecnico.Business.Services
                         retorno += GetCentenaPorExtenso(centenaTrilhao);
 
                         if (Convert.ToInt32(numeroString.Substring(0, 3)) == 1)
-                            retorno += " trilhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " Trilhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                         else if (Convert.ToInt32(numeroString.Substring(0, 3)) > 1)
-                            retorno += " trilhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " Trilhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                     }
                     numeroString = numeroString.Remove(0, 3);
                 }
@@ -52,9 +52,9 @@ namespace TesteTecnico.Business.Services
                         retorno += GetCentenaPorExtenso(centenaBilhao);
 
                         if (Convert.ToInt32(numeroString.Substring(0, 3)) == 1)
-                            retorno += " bilhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " Bilhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                         else if (Convert.ToInt32(numeroString.Substring(0, 3)) > 1)
-                            retorno += " bilhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " Bilhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                     }
                     numeroString = numeroString.Remove(0, 3);
                 }
@@ -67,9 +67,9 @@ namespace TesteTecnico.Business.Services
                         retorno += GetCentenaPorExtenso(centenaMilhao);
 
                         if (Convert.ToInt32(numeroString.Substring(0, 3)) == 1)
-                            retorno += " milhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " Milhão" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                         else if (Convert.ToInt32(numeroString.Substring(0, 3)) > 1)
-                            retorno += " milhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                            retorno += " Milhões" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                     }
                     numeroString = numeroString.Remove(0, 3);
                 }
@@ -80,7 +80,7 @@ namespace TesteTecnico.Business.Services
                     if (centenaMilhar > 0)
                     {
                         retorno += GetCentenaPorExtenso(centenaMilhar);
-                        retorno += " mil" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
+                        retorno += " Mil" + ((Convert.ToInt32(numeroString.Substring(3)) > 0) ? " e " : string.Empty);
                     }
                     numeroString = numeroString.Remove(0, 3);
                 }
@@ -146,9 +146,12 @@ namespace TesteTecnico.Business.Services
                 {
                     listaImputsOrdenados.Add(arrayImputs[i]);
                 }
-                else if (_listaOperadores.Contains(arrayImputs[i]))
+                else if (_listaOperadores.Contains(arrayImputs[i]) || arrayImputs[i] == "%2F")
                 {
-                    if(listaOperadores.Count == 0)
+                    if (arrayImputs[i] == "%2F")
+                        arrayImputs[i] = "/";
+
+                    if (listaOperadores.Count == 0)
                     {
                         listaOperadores.Add(arrayImputs[i]);
                     }
@@ -200,7 +203,9 @@ namespace TesteTecnico.Business.Services
                         case "*":
                             listaNumeros.Add(valor1 * valor2);
                             break;
-                        case "%2F":
+                        case "/":
+                            if(valor2 == 0)
+                                throw new ArithmeticException("Divisão por Zero");
                             listaNumeros.Add(valor1 / valor2);
                             break;
                     }
@@ -226,8 +231,25 @@ namespace TesteTecnico.Business.Services
 
             if (numeroString.Length == 3)
             {
-                retorno += _arrayCentena[Convert.ToInt32(numeroString.Substring(0, 1))];
-                numeroString = numeroString.Remove(0, 1);
+                if (numeroString.Substring(0, 1) == "1")
+                {
+                    if(Convert.ToInt32(numeroString.Substring(1, 2)) > 0)
+                    {
+                        retorno += _arrayCentena[Convert.ToInt32(numeroString.Substring(0, 1))];
+                        numeroString = numeroString.Remove(0, 1);
+                    }
+                    else
+                    {
+                        retorno += "Cem";
+                        numeroString = numeroString.Remove(0, 1);
+
+                    }
+                }
+                else
+                {
+                    retorno += _arrayCentena[Convert.ToInt32(numeroString.Substring(0, 1))];
+                    numeroString = numeroString.Remove(0, 1);
+                }
             }
 
             if (numeroString.Length == 2)
