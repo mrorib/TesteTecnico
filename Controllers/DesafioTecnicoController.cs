@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using TesteTecnico.Business.Services;
 
 namespace TesteTecnico.Controllers
@@ -30,6 +31,12 @@ namespace TesteTecnico.Controllers
         public double GetResultadoExpressao(string expressao)
         {
             return _desafioTecnicoServico.GetResultadoExpressao(expressao);
+        }
+
+        [HttpPost("~/ObjetosUnicos")]
+        public List<JsonElement> GetNumeroPorExtenso(List<JsonElement> listaObjetos)
+        {
+            return _desafioTecnicoServico.GetObjetosUnicos(listaObjetos);
         }
     }
 }
